@@ -39,9 +39,9 @@ const sysConfRouter = {
         // ]
       },
       {
-        path: 'drivers-manager',
+        path: 'company-manager',
         component: () => import('@/views/sysconf/company-manage/index'),
-        name: 'driversManager',
+        name: 'CompanyManager',
         meta: { title: '公司管理', noCache: true, roles:['MODULES_ERP','MODULES_ERP_VEHICLE','MODULES_ERP_VEHICLE_DRIVER'] },
         // children: [
         //     {
@@ -52,13 +52,13 @@ const sysConfRouter = {
         //     },
         // ]
       },
-      // {
-      //   path: 'drivers-modify',
-      //   component: () => import('@/views/erp/bus/drivers-manager/modify'),
-      //   name: 'driversModify',
-      //   hidden: true,
-      //   meta: { title: '驾驶员编辑', noCache: true, roles:['MODULES_ERP','MODULES_ERP_VEHICLE','MODULES_ERP_VEHICLE_DRIVER'] }
-      // },
+      {
+        path: 'company-info',
+        component: () => import('@/views/sysconf/company-manage/company-info'),
+        name: 'CompanyInfo',
+        hidden: true,
+        meta: { title: '公司信息编辑', noCache: true, roles:['MODULES_ERP','MODULES_ERP_VEHICLE','MODULES_ERP_VEHICLE_DRIVER'] }
+      },
       // {
       //   path: 'vehicle-manager',
       //   component: () => import('@/views/erp/bus/vehicle-manager/index'),

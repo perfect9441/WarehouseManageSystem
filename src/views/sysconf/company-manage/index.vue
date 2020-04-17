@@ -3,7 +3,7 @@
     <el-container>
       <el-header class="button-bar" style="height:55px;">
         <el-row>
-          <el-button type="primary" icon="el-icon-plus" >添加公司</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addpage()">添加公司</el-button>
 
           <el-button type="primary" icon="el-icon-setting">批量操作</el-button>
 
@@ -23,7 +23,6 @@
           <vxe-table-column field="name" title="name"></vxe-table-column>
           <vxe-table-column field="sex" title="sex"></vxe-table-column>
           <vxe-table-column field="age" title="age"></vxe-table-column>
-        
         </vxe-table>
         <vxe-pager
           :loading="loading"
@@ -65,6 +64,23 @@ export default {
       this.tablePage.currentPage = currentPage;
       this.tablePage.pageSize = pageSize;
       this.findList();
+    },
+    addpage() {
+      const data = {
+        companyId: null
+      };
+      this.saveormodify(data, "create");
+    },
+    saveormodify(data, status) {
+      const router = {
+        name: "CompanyInfo",
+        params: {
+          data,
+          status
+        },
+        meat: {}
+      };
+      this.$router.push(router);
     }
   }
 };
