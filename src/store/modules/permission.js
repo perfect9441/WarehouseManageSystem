@@ -54,7 +54,7 @@ const actions = {
     return new Promise(resolve => {
       
       let accessedRoutes
-      if (roles.includes('admin')) {
+      if (roles.includes('ADMIN')) {
         
         accessedRoutes = asyncRoutes || []
         

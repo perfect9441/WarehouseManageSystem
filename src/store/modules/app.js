@@ -5,7 +5,8 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
-  device: 'desktop'
+  device: 'desktop',
+  
 }
 
 const mutations = {
@@ -25,7 +26,8 @@ const mutations = {
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device
-  }
+  },
+
 }
 
 const actions = {
@@ -40,7 +42,7 @@ const actions = {
   }
 }
 
-export default {
+export default { 
   namespaced: true,
   state,
   mutations,

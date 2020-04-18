@@ -1,16 +1,23 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
+import {
+  Message
+} from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import {
+  getToken,
+  removeToken
+} from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({
+  showSpinner: false
+}) // NProgress Configuration
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -18,46 +25,60 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // determine whether the user has logged in
-  const hasToken = getToken()
+  const hasToken = getToken('access_token')
 
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({
+        path: '/'
+      })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
+
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      if (hasRoles) {
+        //在此没有必要跳转到401，因为用户要跳转的本没有权限的页面对用户是不公开的
+        // if (hasPermission(store.getters.roles, to.meta.roles)) {
+          // console.info('store.getters.roles')
+          // console.info(store.getters.roles)
+          // console.info('to.meta.roles')
+          // console.info(to)
+          // console.info(to.meta.roles)
 
-      console.info('hasRoles')
-      console.info(hasRoles)
-      console.info(store.getters.roles)
-      if (hasRoles) {  
-      
+          next()
+        // } else {
+        //   next({
+        //     path: '/401',
+        //     replace: true,
+        //     query: {
+        //       noGoBack: true
+        //     }
+        //   })
+        // }
 
-        next()
+
       } else {
-        console.info('hasno-roles')
-       
+        // console.info('hasno-roles')
+
         try {
           // get user info
-          const {roles}= await store.dispatch('user/getInfo') 
-        
-          if (roles.length === 0) {
-            await store.dispatch('user/resetToken')
+          const {roles} = await store.dispatch('user/getInfo')
 
-          }else{
-            // generate accessible routes map based on roles
-            const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-            
-            // dynamically add accessible routes
-            router.addRoutes(accessRoutes)
+          // generate accessible routes map based on roles
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
-            // hack method to ensure that addRoutes is complete
-            // set the replace: true, so the navigation will not leave a history record
-            next({...to, replace: true})
-          }
-          
+          // dynamically add accessible routes
+          router.addRoutes(accessRoutes)
+
+          // hack method to ensure that addRoutes is complete
+          // set the replace: true, so the navigation will not leave a history record
+          next({
+            ...to,
+            replace: true
+          })
+
+
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

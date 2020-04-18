@@ -1,5 +1,5 @@
 module.exports = {
-  title: '仓储管理系统',
+  title: '电商管理平台',
 
   /**
    * @type {boolean} true | false

@@ -4,7 +4,6 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import Element from 'element-ui'
 import './styles/element-variables.scss'
-import './styles/btn.scss'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
@@ -20,15 +19,7 @@ import './utils/error-log' // error log
 import * as filters from './filters' // global filters
 var lodash = require('lodash');
 Vue.prototype.$lodash = lodash
-
-
-import 'xe-utils'
-import VXETable from 'vxe-table'
-import 'vxe-table/lib/index.css'
-
-
-
-
+Vue.prototype.$store = store
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -41,7 +32,12 @@ import 'vxe-table/lib/index.css'
 // if (process.env.NODE_ENV === 'production') {
 //   mockXHR()
 // }
-
+import 'video.js/dist/video-js.css'
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 // set ElementUI lang to EN
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
@@ -59,6 +55,3 @@ new Vue({
   store,
   render: h => h(App)
 })
-
-
-Vue.use(VXETable)

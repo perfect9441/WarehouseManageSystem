@@ -5,10 +5,11 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-import systemRouter from './modules/system'
+
+import yourRouter from './modules/wms/yourmodules.js' //示例
 
 
-import sysconfRouter from './modules/sysconf/sysconf'
+
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -46,6 +47,16 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+    hidden: true
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/login/authredirect'),
+    hidden: true
+  },
 
   {
     path: '/',
@@ -66,16 +77,15 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
 
-  systemRouter,
-  sysconfRouter,
- 
+  yourRouter,
+
 
   // 404 page must be placed at the end !!!
   {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
-  mode: 'history', // require service support
+  // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

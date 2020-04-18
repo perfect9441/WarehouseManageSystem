@@ -1,36 +1,22 @@
 <template>
   <div class="dashboard-container">
-    <el-container>
-      <el-header class="dash-header" style="height:150px;">
-        <panel-group @handleSetLineChartData="handleSetLineChartData" />
-      </el-header>
-      <el-main class="dash-navigate" style="height:300px;" >
-        <Navigate/>
-      </el-main>
-    </el-container>
+    <div class="dashboard-text">姓名: {{ userInfo.empRealname }}</div>
+    <div class="dashboard-text">组织: {{ userInfo.orgName }}</div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import PanelGroup from "./components/PanelGroup";
-import Navigate from "./components/navigate";
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "Dashboard",
+  name: 'Dashboard',
   computed: {
-    ...mapGetters(["name"])
-  },
-  components: {
-    PanelGroup,
-    Navigate
-  },
-  methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type];
-    }
+    ...mapGetters([
+      'name',
+      'userInfo'
+    ])
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -41,11 +27,6 @@ export default {
   &-text {
     font-size: 30px;
     line-height: 46px;
-  } 
-}
-.dash-header ,.dash-navigate{
-    background-color: rgb(240, 240, 240);
-    border-radius: 10px;
-    margin: 10px 0px;
   }
+}
 </style>

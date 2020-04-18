@@ -11,5 +11,9 @@ const getters = {
   errorLogs: state => state.errorLog.logs,
   visitedViews: state => state.tagsView.visitedViews,
   cachedViews: state => state.tagsView.cachedViews,
+  dict:state => state.user.dict,
+  userInfo:state => state.user.userInfo,
+ 
+  
 }
 export default getters
