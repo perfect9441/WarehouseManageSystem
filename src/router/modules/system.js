@@ -8,20 +8,20 @@ const systemRouter = {
   meta: {
     title: '系统管理',
     icon: 'sysmanager',
-    roles:['MODULES_SYS','MODULE_SYS_USER','MODULES_SYS_ORG','MODULES_SYS_AUTH','MODULES_SYS_ROLE','MODULES_SYS_APP']
+    roles:['MODULES_SYS','MODULE_SYS_USER','MODULES_SYS_ORG','MODULES_SYS_AUTH','MODULES_SYS_ROLE']
   },
   children: [
     {
       path: 'user-manager',
       component: () => import('@/views/system/user-manager/index'),
       name: 'UserManager',
-      meta: { title: '系统用户配置', noCache: true ,roles:['MODULES_SYS','MODULE_SYS_USER'] }
+      meta: { title: '用户管理', noCache: true ,roles:['MODULES_SYS','MODULE_SYS_USER'] }
     },
     {
       path: 'org-manager',
       component: () => import('@/views/system/org-manager/index'),
       name: 'OrgManager',
-      meta: { title: '组织架构管理', noCache: true ,roles:['MODULES_SYS','MODULES_SYS_ORG'] }
+      meta: { title: '组织管理', noCache: true ,roles:['MODULES_SYS','MODULES_SYS_ORG'] }
     },
     {
       path: 'power-manager',
@@ -33,20 +33,7 @@ const systemRouter = {
       path: 'role-manager',
       component: () => import('@/views/system/role-manager/index'),
       name: 'RoleManager',
-      meta: { title: '角色管理', noCache: true  ,roles:['MODULES_SYS','MODULES_SYS_ROLE']}
-    },
-    {
-      path: 'app-manager',
-      component: () => import('@/views/system/app-manager/index'),
-      name: 'APPManager',
-      meta: { title: 'APP管理', noCache: true  ,roles:['MODULES_SYS','MODULES_SYS_APP']}
-    },
-    {
-      path: 'app-modify',
-      component: () => import('@/views/system/app-manager/modify/index'),
-      name: 'APPModify',
-      hidden: true ,
-      meta: { title: 'APP编辑', noCache: true  ,roles:['MODULES_SYS','MODULES_SYS_APP']}
+      meta: { title: '规则设定', noCache: true  ,roles:['MODULES_SYS','MODULES_SYS_ROLE']}
     },
     
     

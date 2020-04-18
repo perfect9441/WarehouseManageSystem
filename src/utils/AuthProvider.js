@@ -3,13 +3,14 @@ import {getToken, setToken, removeToken} from '@/utils/auth'
 import axios from 'axios'
 
 function token(data) {
+
   return axios({
     url: process.env.VUE_APP_BASE_API + '/token/oauth/token',
     method: 'post',
     data: qs.stringify(data),
-    auth: {
-      username: '18209477705',
-      password: '123456'
+    auth:  {
+      username: process.env.VUE_APP_USERNAME,
+      password: process.env.VUE_APP_PASSWORD
     },
   })
 }
@@ -20,8 +21,8 @@ export function refreshToken(data) {
     method: 'post',
     data: qs.stringify(data),
     auth: {
-      username: '18209477705',
-      password: '123456'
+      username: process.env.VUE_APP_USERNAME,
+      password: process.env.VUE_APP_PASSWORD
     },
   })
 }
@@ -91,7 +92,6 @@ export function getAccessToken() {
   let dt = date.getTime();
   let expires_in = getToken('expires_in');
   // let expires_in = 100;
-  // TODO:处理503错误,过期刷新不起作用
   if ((!expires_in || dt >= expires_in) && getToken('access_token')) {
     //access_token 过期刷新
     console.info('access_token 过期刷新')

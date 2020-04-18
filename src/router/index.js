@@ -6,7 +6,11 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-import yourRouter from './modules/wms/yourmodules.js' //示例
+
+
+import wmsRouter from '@/router/modules/wms/wms'
+import systemRouter from './modules/system'
+
 
 
 
@@ -76,8 +80,9 @@ export const constantRoutes = [
 
 
 export const asyncRoutes = [
-
-  yourRouter,
+  systemRouter,
+  wmsRouter,
+  
 
 
   // 404 page must be placed at the end !!!

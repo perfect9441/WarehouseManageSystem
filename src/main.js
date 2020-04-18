@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
-
+import './styles/btn.scss'
 import App from './App'
 import store from './store'
 import router from './router'
@@ -20,6 +20,15 @@ import * as filters from './filters' // global filters
 var lodash = require('lodash');
 Vue.prototype.$lodash = lodash
 Vue.prototype.$store = store
+
+
+
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
+
+
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -55,3 +64,6 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+
+Vue.use(VXETable)
