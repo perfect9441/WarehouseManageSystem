@@ -20,16 +20,16 @@
         >
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="companyName" title="companyName"></vxe-table-column>
-          <vxe-table-column field="companyCode" title="companyCode"></vxe-table-column>
-          <vxe-table-column field="companyUser" title="companyUser"></vxe-table-column>
+          <vxe-table-column field="companyName" title="公司名称"></vxe-table-column>
+          <vxe-table-column field="companyCode" title="公司编码"></vxe-table-column>
+          <vxe-table-column field="companyClassify" title="公司级别" :formatter="fmtcompanylevel"></vxe-table-column>
+          <vxe-table-column field="parentCompany.companyName" title="所属上级公司"></vxe-table-column>
+          <vxe-table-column field="companyUser" title="公司联系人"></vxe-table-column>
+          <vxe-table-column field="companyTel" title="公司联系电话"></vxe-table-column>
+          <vxe-table-column field="useFlg" title="是否使用:" :formatter="fmtuseflg"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
-              <template v-if="$refs.xTable.isActiveByRow(row)">
-                <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
-                <vxe-button @click="cancelRowEvent(row)">取消</vxe-button>
-              </template>
-              <template v-else>
+              <template>
                 <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
               </template>
             </template>
@@ -37,9 +37,9 @@
         </vxe-table>
         <vxe-pager
           :loading="loading"
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
-          :total="tablePage.totalResult"
+          :current-page="tablePage.current"
+          :page-size="tablePage.size"
+          :total="tablePage.total"
           :layouts="['PrevPage', 'JumpNumber', 'NextPage', 'FullJump', 'Sizes', 'Total']"
           @page-change="handlePageChange"
         ></vxe-pager>
@@ -50,7 +50,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getCompanyPage } from "@/api/wms/company/company";
+import {
+  getCompanyPage,
+  getCompanyPageCarryParentCompany
+} from "@/api/wms/company/company";
 
 export default {
   name: "companyManage",
@@ -63,13 +66,50 @@ export default {
       companyList: [],
       tablePage: {
         current: 1,
-        size: 10
+        size: 10,
+        total: 0
       },
-      loading: false
+      loading: false,
+      companyClassify: [
+        {
+          value: "ZGS",
+          label: "总公司"
+        },
+        {
+          value: "SGS",
+          label: "省级分公司"
+        },
+        {
+          value: "CGS",
+          label: "市级分公司"
+        },
+        {
+          value: "QXGS",
+          label: "区县级分公司"
+        },
+        {
+          value: "XSD",
+          label: "乡镇、社区销售点"
+        }
+      ],
+      useFlg: [
+        {
+          value: "use",
+          label: "启用"
+        },
+        {
+          value: "pause",
+          label: "暂停使用"
+        },
+        {
+          value: "abandon",
+          label: "弃用"
+        }
+      ]
     };
   },
   created() {
-    this._getCompanyPage(this.tablePage);
+    this._getCompanyPageCarryParentCompany(this.tablePage);
   },
   methods: {
     handlePageChange({ currentPage, pageSize }) {
@@ -86,10 +126,11 @@ export default {
         params: { id: companyid }
       });
     },
-    _getCompanyPage(data) {
-      getCompanyPage(data).then(res => {
+    _getCompanyPageCarryParentCompany(data) {
+      getCompanyPageCarryParentCompany(data).then(res => {
         if (res.status === 200) {
           this.companyList = res.data.records;
+          this.tablePage.total = res.data.total;
         }
       });
     },
@@ -98,6 +139,17 @@ export default {
     },
     selectChangeEvent({ checked, records }) {
       console.log(checked ? "勾选事件" : "取消事件", records);
+    },
+    editRowEvent(row) {
+      this.saveormodify(row.companyId);
+    },
+    fmtcompanylevel({ cellValue }) {
+      let item = this.companyClassify.find(item => item.value === cellValue);
+      return item ? item.label : "";
+    },
+    fmtuseflg({ cellValue }) {
+      let item = this.useFlg.find(item => item.value === cellValue);
+      return item ? item.label : "";
     }
   }
 };
