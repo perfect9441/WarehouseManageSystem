@@ -113,9 +113,9 @@ export default {
   },
   methods: {
     handlePageChange({ currentPage, pageSize }) {
-      this.tablePage.currentPage = currentPage;
-      this.tablePage.pageSize = pageSize;
-      this.findList();
+      this.tablePage.current = currentPage;
+      this.tablePage.size = pageSize;
+      this._getCompanyPageCarryParentCompany(this.tablePage);
     },
     addpage() {
       this.saveormodify("add");

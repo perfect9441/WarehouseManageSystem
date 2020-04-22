@@ -1,6 +1,6 @@
 import Layout from '@/layout'
 import sysConfRouter from '@/router/modules/wms/sysconf/sysconf'
-// import dashboardRouter from '@/router/modules/wms/dashboard/dashboard'
+// import dashboardRouter from '@/router/modules/wms/houseconf/houseconf'
 
 const wmsRouter = {
   path: '/wms',
@@ -20,7 +20,7 @@ const wmsRouter = {
       name: 'dashboardIndex',
       meta: { title: '首页', noCache: true, roles:[]},
     },
-    sysConfRouter
+    sysConfRouter,
     
   ]
 
