@@ -22,6 +22,7 @@
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="categoryName" title="分类名称"></vxe-table-column>
           <vxe-table-column field="categoryCode" title="分类代码"></vxe-table-column>
+          <vxe-table-column field="categoryCode" title="上级分类"></vxe-table-column>
           <vxe-table-column field="useFlg" title="使用状态" :formatter="fmtuseflg"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
@@ -46,7 +47,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getCategoryPage } from "@/api/wms/category/category";
+import { getCategoryPage,getCategoryPageCarryParentCategory } from "@/api/wms/category/category";
 
 export default {
   name: "HouseManage",
@@ -80,7 +81,7 @@ export default {
     };
   },
   created() {
-    this._getCategoryPage(this.tablePage);
+    this._getCategoryPageCarryParentCategory(this.tablePage);
   },
   methods: {
     handlePageChange({ current, size }) {
@@ -91,17 +92,17 @@ export default {
     _getCategoryPage(data) {
       getCategoryPage(data).then(res => {
         if (res.status === 200) {
-          this.warehouseList = res.data.records;
+          this.categoryList = res.data.records;
         }
       });
     },
-    // _getWarehousePageCarryCompany(data){
-    //   getWarehousePageCarryCompany(data).then(res=>{
-    //     if(res.status === 200){
-    //        this.warehouseList = res.data.records;
-    //     }
-    //   })
-    // },
+    _getCategoryPageCarryParentCategory(data){
+      getCategoryPageCarryParentCategory(data).then(res=>{
+        if(res.status === 200){
+           this.categoryList = res.data.records;
+        }
+      })
+    },
     addpage() {
       this.saveormodify("add")
     },
@@ -121,12 +122,12 @@ export default {
       let item = this.useFlg.find(item => item.value === cellValue);
       return item ? item.label : "";
     },
-    fmthouseClassify({ cellValue }) {
-      let item = this.warehouseClassify.find(item => item.value === cellValue);
-      return item ? item.label : "";
-    },
+    // fmthouseClassify({ cellValue }) {
+    //   let item = this.warehouseClassify.find(item => item.value === cellValue);
+    //   return item ? item.label : "";
+    // },
     editRowEvent(row) {
-      this.saveormodify(row.warehouseId);
+      this.saveormodify(row.categoryeId);
     },
   }
 };

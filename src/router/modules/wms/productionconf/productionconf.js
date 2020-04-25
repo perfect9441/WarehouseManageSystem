@@ -17,26 +17,13 @@ const productionConfRouter = {
         name: 'CategoryManager',
         meta: { title: '分类设置', noCache: true, roles:[]},
       },
-    //   {
-    //     path: 'company-info/:id',
-    //     component: () => import('@/views/wms/sysconf/company-manage/company-info'),
-    //     name: 'CompanyInfo',
-    //     hidden:true,
-    //     meta: { title: '公司信息编辑', noCache: true, roles:[]},
-    //   },
-    //   {
-    //     path: 'House-manager',
-    //     component: () => import('@/views/wms/sysconf/house-manage/index'),
-    //     name: 'HouseManager',
-    //     meta: { title: '仓库管理', noCache: true, roles:[]},
-    //   },
-    //   {
-    //     path: 'House-info/:id',
-    //     component: () => import('@/views/wms/sysconf/house-manage/house-info'),
-    //     name: 'HouseInfo',
-    //     hidden:true,
-    //     meta: { title: '仓库信息编辑', noCache: true, roles:[]},
-    //   }
+      {
+        path: 'category-info/:id',
+        component: () => import('@/views/wms/productionconf/category/category-info'),
+        name: 'CategoryInfo',
+        hidden:true,
+        meta: { title: '分类信息管理', noCache: true, roles:[]},
+      },
     ]
   
   }
