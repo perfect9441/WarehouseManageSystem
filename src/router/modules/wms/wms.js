@@ -1,5 +1,6 @@
 import Layout from '@/layout'
 import sysConfRouter from '@/router/modules/wms/sysconf/sysconf'
+import productionConfRouter from '@/router/modules/wms/productionconf/productionconf'
 // import dashboardRouter from '@/router/modules/wms/houseconf/houseconf'
 
 const wmsRouter = {
@@ -21,6 +22,7 @@ const wmsRouter = {
       meta: { title: '首页', noCache: true, roles:[]},
     },
     sysConfRouter,
+    productionConfRouter
     
   ]
 

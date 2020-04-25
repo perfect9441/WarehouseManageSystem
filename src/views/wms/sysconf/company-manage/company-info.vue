@@ -116,10 +116,10 @@
       </el-form>
     </div>
     <!-- TODO:上级公司不存在问题解决 -->
-    <div style="margin:30px;" class="cpmoany-friends" v-show="disable">
+    <div style="margin:30px;" class="cpmoany-friends" v-show="disable" >
       <el-row>
         <el-col :span="24" class="col-title">所属上级公司</el-col>
-        <el-form :model="parentCompany" label-width="80px">
+        <el-form :model="parentCompany" label-width="80px" v-if="parentCompany !== null">
           <el-col :span="4" class="col-text">
             <el-form-item label="公司名称">
               <span>{{parentCompany.companyName}}</span>
