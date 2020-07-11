@@ -10,7 +10,10 @@ import {
 import {
   resetRouter
 } from '@/router'
-
+import {
+  getAdminByPrincipal
+} from '@/api/user'
+import Vue from 'vue'
 
 
 
@@ -80,11 +83,12 @@ const actions = {
   // get user info
   getInfo({ 
     commit,
-    state
+    state,
+    dispatch
   }) {
     return new Promise(async (resolve, reject) => {
 
-
+    
       let adminToken = {
         roles: ['ADMIN'],
         introduction: 'I am a super administrator',
@@ -101,7 +105,16 @@ const actions = {
       let userInfo={}
       commit('SET_AVATAR', adminToken.avatar)
       commit('SET_ROLES', adminToken.roles)
-      commit('SET_USERINFO', adminToken)
+     
+       await  getAdminByPrincipal().then(res=>{
+        console.info('getAdminByPrincipal')
+        console.info(res)
+        commit('SET_USERINFO', res.data)
+        
+      })
+      //连接websocket
+      Vue.prototype.$connect()
+      Vue.prototype.$store.dispatch('websocket/_GetUnReadMsgList')
       // await getEmpByEmpName(getToken('empname')).then(res => {
       //   console.info('getEmpByEmpName')
       //   console.info(res)
@@ -195,6 +208,7 @@ const actions = {
       removeToken('empname')
       resetRouter()
       dispatch('tagsView/delAllViews', null, { root: true })
+      Vue.prototype.$disconnect()
       resolve()
       
     })

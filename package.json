@@ -15,6 +15,7 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "3.0.1",
     "axios": "0.18.0",
     "bpmn-js": "^3.4.1",
     "bpmn-js-properties-panel": "^0.30.0",
@@ -29,6 +30,7 @@
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "lodash": "^4.17.11",
+    "lodash-uuid": "0.0.3",
     "moment": "^2.24.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
@@ -45,6 +47,7 @@
     "vue": "2.6.10",
     "vue-count-to": "^1.0.13",
     "vue-lottie": "^0.2.1",
+    "vue-native-websocket": "^2.0.14",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "3.0.6",
     "vue-style-loader": "^4.1.2",

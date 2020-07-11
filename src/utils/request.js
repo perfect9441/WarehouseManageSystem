@@ -16,7 +16,8 @@ import {
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 3600000  // request timeout
+  timeout: 3600000 , // request timeout
+ 
 })
 
 // request interceptor
@@ -26,6 +27,7 @@ service.interceptors.request.use(
 
       await getAccessToken().then(token => {
         // console.info(token)
+        
         if (token) {
           config.headers.Authorization = 'bearer ' + token;
         } else {
@@ -58,9 +60,9 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.status !== 200) {
+    if (response.status !== 200) {
       Message({
-        message: res.message || 'Error',
+        message: response.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
@@ -78,7 +80,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(response.status || 'Error'))
     } else {
       return res
     }

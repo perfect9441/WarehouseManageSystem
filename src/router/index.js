@@ -10,6 +10,8 @@ import Layout from '@/layout'
 
 import wmsRouter from '@/router/modules/wms/wms'
 import systemRouter from './modules/system'
+import mmsRouter from './modules/mms/mms'
+import mallRouter from './modules/mall/mall'
 
 
 
@@ -82,6 +84,8 @@ export const constantRoutes = [
 export const asyncRoutes = [
   systemRouter,
   wmsRouter,
+  mmsRouter,
+  mallRouter,
   
 
 

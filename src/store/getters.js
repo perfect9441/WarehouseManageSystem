@@ -13,6 +13,12 @@ const getters = {
   cachedViews: state => state.tagsView.cachedViews,
   dict:state => state.user.dict,
   userInfo:state => state.user.userInfo,
+
+  unSignMsgList:state => state.websocket.unSignMsgList,
+  unSignCount:state => state.websocket.unSignCount,
+  sendMsgData:state => state.websocket.sendMsgData,
+  isOnPage:state => state.websocket.isOnPage,
+  acceptMsgData:state => state.websocket.acceptMsgData,
  
   
 }

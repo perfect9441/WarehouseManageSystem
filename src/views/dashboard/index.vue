@@ -1,6 +1,9 @@
 <template>
   <div class="dashboard-container">
-    name:{{this.userInfo.username}}
+    <div>账号:{{userInfo.username}}</div>
+    <div>组织:{{userInfo.orgCrumbs}}</div>
+  
+    
   </div>
 </template>
 

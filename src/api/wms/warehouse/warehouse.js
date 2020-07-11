@@ -14,12 +14,12 @@ export function getWarehousePage({current,size}) {
   })
 }
 
-export function getWarehousePageCarryCompany({current,size}) {
-  return request({
-    url: 'wms/warehouse/getWarehousePageCarryCompany?current=' + current + '&size=' + size,
-    method: 'get',
-  })
-}
+// export function getWarehousePageCarryCompany({current,size}) {
+//   return request({
+//     url: 'wms/warehouse/getWarehousePageCarryCompany?current=' + current + '&size=' + size,
+//     method: 'get',
+//   })
+// }
 
 export function saveOrModifyWarehouse(data) {
   return request({
@@ -35,5 +35,12 @@ export function getWarehousePageByAttributes(data) {
     url: '/wms/warehouse/getWarehousePageByAttributes',
     method: 'post',
     params: data
+  })
+}
+
+export function removeWarehouse(warehouseId) {
+  return request({
+    url: '/wms/warehouse/removeWarehouse/'+warehouseId,
+    method: 'delete',
   })
 }

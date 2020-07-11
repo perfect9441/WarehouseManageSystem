@@ -5,12 +5,12 @@
         <el-row>
           <el-col :span="8" class="table-cell">
             <el-form-item label="分类名称">
-              <el-input v-model="categoryInfo.warehouseName"></el-input>
+              <el-input v-model="categoryInfo.categoryName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8" class="table-cell">
             <el-form-item label="分类编码">
-              <el-input v-model="categoryInfo.warehouseCode"></el-input>
+              <el-input v-model="categoryInfo.categoryCode"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -35,15 +35,15 @@
           <el-col :span="8" class="table-cell">
             <el-form-item label="上级分类">
               <el-select
-                v-model="categoryInfo.companyId"
+                v-model="categoryInfo.parentCategoryId"
                 placeholder="请选择上级分类"
                 :disabled="disable"
               >
                 <el-option
-                  v-for="item in companyList"
-                  :label="item.companyName"
-                  :value="item.companyId"
-                  :key="item.companyId"
+                  v-for="item in categoryList"
+                  :label="item.categoryName"
+                  :value="item.categoryId"
+                  :key="item.categoryId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -90,69 +90,57 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- <div style="margin:30px;" class="cpmoany-friends">
+    <div style="margin:30px;" class="category-friends" v-show="disable">
       <el-row>
-        <el-col :span="24" class="col-title">所属上级公司</el-col>
-        <el-form :model="parentCompany" label-width="80px">
+        <el-col :span="24" class="col-title">所属上级分类</el-col>
+        <el-form :model="parentcategory" label-width="80px">
           <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyName}}</span>
+            <el-form-item label="分类名称">
+              <span>{{parentcategory.categoryName}}</span>
             </el-form-item>
           </el-col>
           <el-col :span="4" class="col-text">
-            <el-form-item label="公司代码">
-              <span>{{parentCompany.companyCode}}</span>
+            <el-form-item label="分类代码">
+              <span>{{parentcategory.categoryCode}}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyUser}}</span>
+          <!-- <el-col :span="4" class="col-text">
+            <el-form-item label="分类级别">
+              <span>{{parentcategory.categoryClassify}}</span>
             </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyTel}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司地址">
-              <span>{{parentCompany.companyAddr}}</span>
-            </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-form>
       </el-row>
     </div>
-
-    <div style="margin:30px;" class="cpmoany-friends">
+    <div style="margin:30px;" class="category-friends" v-show="disable">
       <el-row>
         <el-col :span="24" class="col-title">所辖子公司</el-col>
         <el-col :span="24" class="col-title">
-           <vxe-table
-          border="inner"
-          :align="allAlign"
-          :data="chilidcompanylist"
-        >
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="companyName" title="公司名称"></vxe-table-column>
-          <vxe-table-column field="companyCode" title="公司编码"></vxe-table-column>
-          <vxe-table-column field="companyClassify" title="公司级别" :formatter="fmtcompanylevel"></vxe-table-column>
-          <vxe-table-column field="companyUser" title="公司联系人"></vxe-table-column>
-          <vxe-table-column field="companyTel" title="公司联系电话"></vxe-table-column>
-          <vxe-table-column field="useFlg" title="是否使用" :formatter="fmtuseflg"></vxe-table-column>
-        </vxe-table>
+          <vxe-table border="inner" :align="allAlign" :data="childcategorylist">
+            <vxe-table-column type="seq" width="60"></vxe-table-column>
+            <vxe-table-column field="categoryName" title="分类名称"></vxe-table-column>
+            <vxe-table-column field="categoryCode" title="分类编码"></vxe-table-column>
+            <vxe-table-column field="categoryClassify" title="分类级别" :formatter="fmtcategorylevel"></vxe-table-column>
+            <vxe-table-column field="useFlg" title="是否使用" :formatter="fmtuseflg"></vxe-table-column>
+          </vxe-table>
         </el-col>
-        
       </el-row>
-    </div>-->
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { getCategoryById,saveOrModifyCategory } from "@/api/wms/category/category";
+import {
+  getCategoryById,
+  saveOrModifyCategory,
+  getCategoryPageByAttributes,
+  getParentCategoryByChildCategoryId,
+  getChildCategoryListById
+} from "@/api/wms/category/category";
 
 export default {
-  name: "categoryInfo",
+  name: "CategoryInfo",
   computed: {
     ...mapGetters(["name"])
   },
@@ -161,7 +149,9 @@ export default {
       categoryId: "",
       type: "",
       categoryInfo: {},
-      parentCategoryList: [],
+      parentcategory: {},
+      categoryList: [],
+      childcategorylist: [],
       tablePage: {
         current: 1,
         size: 100,
@@ -209,23 +199,24 @@ export default {
   },
   created() {
     this.categoryInfo = {};
-    
     this.categoryId = this.$route.params.id;
     if (this.categoryId === "add") {
       this.type = "保存";
-      this.categoryInfo.useFlg = 'use'
+      this.categoryInfo.useFlg = "use";
     } else {
-        this._getCategoryById(this.categoryId);
+      this._getCategoryById(this.categoryId);
+      this._getChildCategoryListById(this.categoryId);
+      this._getParentCategoryByChildCategoryId(this.categoryId);
       this.type = "修改";
       this.disable = true;
-      // setTimeout(() => {
-      //   this.getcompanylist();
-      // }, 500);
+      setTimeout(() => {
+        this.getparentCategorylist();
+      }, 500);
     }
   },
   methods: {
     saveorupdate() {
-      this._saveOrModifyWarehouse(this.categoryInfo);
+      this._saveOrModifyCategory(this.categoryInfo);
     },
     _getCategoryById(categoryId) {
       getCategoryById(categoryId).then(res => {
@@ -242,59 +233,73 @@ export default {
             type: "success"
           });
           this.type = "修改";
+          this.disable = false
           this._getCategoryById(res.data.categoryId);
         }
       });
     },
-    // _getCompanyPageByAttributes(data) {
-    //   getCompanyPageByAttributes(data).then(res => {
-    //     if (res.status === 200) {
-    //       this.companyList = res.data.records;
-    //     }
-    //   });
-    // },
+    _getCategoryPageByAttributes(data) {
+      getCategoryPageByAttributes(data).then(res => {
+        if (res.status === 200) {
+          this.categoryList = res.data.records;
+        }
+      });
+    },
+    _getChildCategoryListById(categoryId) {
+      getChildCategoryListById(categoryId).then(res => {
+        if (res.status === 200) {
+          this.childcategorylist = res.data;
+        }
+      });
+    },
+    _getParentCategoryByChildCategoryId(categoryId) {
+      getParentCategoryByChildCategoryId(categoryId).then(res => {
+        if (res.status === 200) {
+          this.parentcategory = res.data;
+        }
+      });
+    },
     getparentCategorylist() {
       let categoryClassify = "";
-      if (this.categoryInfo.categoryClassify == "SCQ") {
-        categoryClassify = "SGS";
-      } else if (this.categoryInfo.categoryClassify == "CCQ") {
-        categoryClassify = "CGS";
-      } else if (this.categoryInfo.categoryClassify == "QXCQ") {
-        categoryClassify = "QXGS";
-      } else if (this.categoryInfo.categoryClassify == "XSDCQ") {
-        categoryClassify = "XSD";
-      } else if (this.categoryInfo.categoryClassify == "ZCQ") {
-        categoryClassify = "ZGS";
+      if (this.categoryInfo.categoryClassify == "L2") {
+        categoryClassify = "L1";
+      } else if (this.categoryInfo.categoryClassify == "L3") {
+        categoryClassify = "L2";
+      } else if (this.categoryInfo.categoryClassify == "L4") {
+        categoryClassify = "L3";
+      } else if (this.categoryInfo.categoryClassify == "L5") {
+        categoryClassify = "L4";
+      } else if (this.categoryInfo.categoryClassify == "L1") {
+        // categoryClassify = "ZGS";
+        return;
       }
       const data = {
         categoryClassify: categoryClassify
       };
-      this._getCompanyPageByAttributes(data);
+      this._getCategoryPageByAttributes(data);
     },
     changelevel() {
-      this.categoryInfo.companyId = '';
-      this.getcompanylist();
-      
+      this.categoryInfo.parentCategoryId = "";
+      this.getparentCategorylist();
     },
-    // 两个select进行级联操作的时候需要进行特殊处理
-    getvalue(val){
+    getvalue(val) {
       if (val) {
-        let obj = {}
-        obj = this.companyList.find(item => {
-          return item.value === val 
-        })
-        this.$set(this.categoryInfo, this.categoryInfo.companyId, val.value)
-      } 
+        let obj = {};
+        obj = this.categoryList.find(item => {
+          return item.value === val;
+        });
+        this.$set(this.categoryInfo, this.categoryInfo.categoryId, val.value);
+      }
     },
     backtoindex() {
       const router = {
-        name: "HouseManager",
+        name: "CategoryManager",
         params: {},
         meat: {}
       };
       this.$router.push(router);
     },
-    fmtcompanylevel({ cellValue }) {
+    fmtcategorylevel({ cellValue }) {
       let item = this.categoryClassify.find(item => item.value === cellValue);
       return item ? item.label : "";
     },
@@ -302,21 +307,13 @@ export default {
       let item = this.useFlg.find(item => item.value === cellValue);
       return item ? item.label : "";
     }
-    // formatdate(data) {
-    //   if (this.companyid === "add") {
-    //     return;
-    //   } else {
-    //     var date = new Date(data);
-    //     return moment(date).format("YYYY-MM-DD HH:mm:ss");
-    //   }
-    // }
   }
 };
 </script>
 
 <style scope>
 .info-form,
-.cpmoany-friends {
+.category-friends {
   background-color: #eeeeee;
   border-radius: 10px;
   /* min-height: 500px; */

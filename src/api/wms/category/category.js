@@ -14,6 +14,13 @@ export function getCategoryPage({current,size}) {
     })
   }
 
+  export function getChildCategoryListById(categoryId) {
+    return request({
+      url: 'wms/category/getChildCategoryListById/' + categoryId,
+      method: 'get',
+    })
+  }
+
   export function getCategoryById(categoryId) {
     return request({
       url: 'wms/category/getCategoryById/' + categoryId,
@@ -29,3 +36,25 @@ export function getCategoryPage({current,size}) {
     })
   }
 
+export function getCategoryPageByAttributes(data) {
+  return request({
+    url: 'wms/category/getCategoryPageByAttributes',
+    method: 'post',
+    params:data
+  })
+}
+
+export function getParentCategoryByChildCategoryId(childCategoryId) {
+  return request({
+    url: 'wms/category/getParentCategoryByChildCategoryId/' + childCategoryId,
+    method: 'get',
+  })
+}
+
+removeCategory
+export function removeCategory(categoryId) {
+  return request({
+    url: 'wms/category/removeCategory/' + categoryId,
+    method: 'delete',
+  })
+}

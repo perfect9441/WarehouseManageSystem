@@ -24,6 +24,32 @@ const productionConfRouter = {
         hidden:true,
         meta: { title: '分类信息管理', noCache: true, roles:[]},
       },
+      {
+        path: 'parameter-manager',
+        component: () => import('@/views/wms/productionconf/parameterconf/parameterconf'),
+        name: 'ParameterManager',
+        meta: { title: '货物参数设置', noCache: true, roles:[]},
+      },
+      {
+        path: 'parametervalue-manager/:id',
+        component: () => import('@/views/wms/productionconf/parameterconf/parameterValueconf'),
+        name: 'ParameterValueManager',
+        hidden:true,
+        meta: { title: '货物参数值设置', noCache: true, roles:[]},
+      },
+      {
+        path: 'specification-manager',
+        component: () => import('@/views/wms/productionconf/specificationconf/specificationconf'),
+        name: 'SpecificationManager',
+        meta: { title: '货物规格设置', noCache: true, roles:[]},
+      },
+      {
+        path: 'specificationvalue-manager/:id',
+        component: () => import('@/views/wms/productionconf/specificationconf/specificationValueconf'),
+        name: 'SpecificationValueManager',
+        hidden:true,
+        meta: { title: '货物规格值设置', noCache: true, roles:[]},
+      },
     ]
   
   }

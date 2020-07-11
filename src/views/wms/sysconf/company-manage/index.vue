@@ -30,6 +30,9 @@
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
               <template>
+                <vxe-button @click="checkEvent(row)">查看详情</vxe-button>
+              </template>
+              <template>
                 <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
               </template>
             </template>
@@ -45,6 +48,16 @@
         ></vxe-pager>
       </el-main>
     </el-container>
+
+    <el-dialog title="详细信息" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <div class="dialog-context">
+
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,7 +118,8 @@ export default {
           value: "abandon",
           label: "弃用"
         }
-      ]
+      ],
+       dialogVisible: false
     };
   },
   created() {
@@ -143,6 +157,9 @@ export default {
     editRowEvent(row) {
       this.saveormodify(row.companyId);
     },
+    checkEvent(row) {
+      console.info(row);
+    },
     fmtcompanylevel({ cellValue }) {
       let item = this.companyClassify.find(item => item.value === cellValue);
       return item ? item.label : "";
@@ -150,7 +167,14 @@ export default {
     fmtuseflg({ cellValue }) {
       let item = this.useFlg.find(item => item.value === cellValue);
       return item ? item.label : "";
-    }
+    },
+     handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
   }
 };
 </script>

@@ -11,6 +11,8 @@
 
         <error-log class="errLog-container right-menu-item hover-effect"/>
 
+        <message-box class=" right-menu-item hover-effect"/>
+
         <screenfull id="screenfull" class="right-menu-item hover-effect"/>
 
         <el-tooltip content="Global Size" effect="dark" placement="bottom">
@@ -84,6 +86,7 @@
     import Screenfull from '@/components/Screenfull'
     import SizeSelect from '@/components/SizeSelect'
     import Search from '@/components/HeaderSearch'
+    import MessageBox from '@/components/MessageBox'
     // import {
     //     modifyPassword
     // } from '@/api/user'
@@ -122,6 +125,7 @@
             }
         },
         components: {
+          MessageBox,
             Breadcrumb,
             Hamburger,
             ErrorLog,

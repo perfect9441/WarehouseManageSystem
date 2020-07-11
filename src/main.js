@@ -15,17 +15,52 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+
 import './utils/error-log' // error log
 import * as filters from './filters' // global filters
 var lodash = require('lodash');
+var lodashUuid = require('lodash-uuid');
 Vue.prototype.$lodash = lodash
+Vue.prototype.$lodashUuid = lodashUuid
 Vue.prototype.$store = store
 
+import moment from "moment";
+Vue.prototype.$moment = moment
+
+import VueNativeSock from 'vue-native-websocket'
+
+Vue.use(VueNativeSock, 'ws://218.203.206.160:60007/ws', {
+  connectManually: true,
+  store: store,
+  // format: 'json',
+ 
+  // passToStoreHandler: function (eventName, event) {
+  //   if (!eventName.startsWith('SOCKET_')) {
+  //     return
+  //   }
+  //   let method = 'commit';
+  //   let target = eventName.toUpperCase();
+  //   let msg = event;
+  //   if (this.format === 'json' && event.data) {
+  //     msg = JSON.parse(event.data);
+  //     if (msg.mutation) {
+  //       target = [msg.namespace || '', msg.mutation].filter((e) => !!e).join('/');
+  //     } else if (msg.action) {
+  //       method = 'dispatch';
+  //       target = [msg.namespace || '', msg.action].filter((e) => !!e).join('/');
+  //     }
+  //   }
+  //   this.store[method](target, msg);
+  //   this.store.state.socket.message = msg;
+  // }
+})
 
 
-import 'xe-utils'
+import XEUtils from 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+Vue.use(VXETable)
+Vue.prototype.$XEUtils = XEUtils
 
 
 
@@ -64,6 +99,3 @@ new Vue({
   store,
   render: h => h(App)
 })
-
-
-Vue.use(VXETable)

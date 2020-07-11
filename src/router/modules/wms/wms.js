@@ -1,15 +1,18 @@
 import Layout from '@/layout'
 import sysConfRouter from '@/router/modules/wms/sysconf/sysconf'
 import productionConfRouter from '@/router/modules/wms/productionconf/productionconf'
-// import dashboardRouter from '@/router/modules/wms/houseconf/houseconf'
-
+import bjstorageRouter from '@/router/modules/wms/storage/bjstorage'
+import cpstorageRouter from '@/router/modules/wms/storage/cpstorage'
+import housebillRouter from '@/router/modules/wms/housebill/housebill'
+import billRouter from '@/router/modules/wms/bill/bill'
+import tianchengBillRouter from '@/router/modules/wms/tianchengbill/tianchengbill'
 const wmsRouter = {
   path: '/wms',
   component: Layout,
   name: 'Wms',
   breadcrumb:false,
   meta: {
-    title: '仓库管理系统',
+    title: '仓储中心',
     component: Layout,
     icon: 'sysmanager',
     roles:['MODULES_SYS','MODULE_SYS_USER','MODULES_SYS_ORG','MODULES_SYS_AUTH','MODULES_SYS_ROLE']
@@ -22,7 +25,12 @@ const wmsRouter = {
       meta: { title: '首页', noCache: true, roles:[]},
     },
     sysConfRouter,
-    productionConfRouter
+    productionConfRouter,
+    bjstorageRouter,
+    cpstorageRouter,
+    housebillRouter,
+    billRouter,
+    tianchengBillRouter
     
   ]
 

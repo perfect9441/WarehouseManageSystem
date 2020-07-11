@@ -85,6 +85,11 @@
               <el-input v-model="companyInfo.companyAddr"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :span="24" class="table-cell">
+            <el-form-item label="备注">
+              <el-input type="textarea" v-model="companyInfo.companyText"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <!-- TODO:时间格式化处理问题 -->
         <el-row>
@@ -115,7 +120,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- TODO:上级公司不存在问题解决 -->
     <div style="margin:30px;" class="cpmoany-friends" v-show="disable" >
       <el-row>
         <el-col :span="24" class="col-title">所属上级公司</el-col>

@@ -18,7 +18,7 @@ const houseConfRouter = {
         meta: { title: '仓库管理', noCache: true, roles:[]},
       },
       {
-        path: 'House-info/:id',
+        path: 'house-info/:id',
         component: () => import('@/views/wms/sysconf/house-manage/house-info'),
         name: 'HouseInfo',
         hidden:true,

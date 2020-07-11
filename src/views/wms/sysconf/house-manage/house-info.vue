@@ -17,22 +17,17 @@
         <el-row>
           <el-col :span="8" class="table-cell">
             <el-form-item label="仓库类型">
-              <el-select
-                v-model="warehouseInfo.warehouseClassify"
-                placeholder="请选择仓库等级"
-                @change="changelevel()"
-                :disabled="disable"
-              >
+              <el-select v-model="warehouseInfo.warehouseClassify" placeholder="请选择仓库等级">
                 <el-option
-                  v-for="item in warehouseClassify"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.value"
+                  v-for="item in Classify"
+                  :label="item.dictName"
+                  :value="item.dictCode"
+                  :key="item.dictCode"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8" class="table-cell">
+          <!-- <el-col :span="8" class="table-cell">
             <el-form-item label="所属公司">
               <el-select
                 v-model="warehouseInfo.companyId"
@@ -47,15 +42,15 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col>-->
           <el-col :span="8" class="table-cell">
             <el-form-item label="是否启用">
               <el-select v-model="warehouseInfo.useFlg" placeholder="请选择使用类型">
                 <el-option
                   v-for="item in useFlg"
-                  :label="item.label"
-                  :value="item.value"
-                  :key="item.label"
+                  :label="item.dictName"
+                  :value="item.dictCode"
+                  :key="item.dictCode"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -68,19 +63,18 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" class="table-cell">
-            <el-form-item
-              label="联系电话"
-              prop="companyTel"
-              :rules="[
-              { type: 'number', message: '电话号码必须为数字值'}
-            ]"
-            >
-              <el-input type="companyTel" v-model.number="warehouseInfo.warehouseTel"></el-input>
+            <el-form-item label="联系电话">
+              <el-input v-model.number="warehouseInfo.warehouseTel"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8" class="table-cell">
             <el-form-item label="联系地址">
               <el-input v-model="warehouseInfo.warehouseAddr"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="table-cell">
+            <el-form-item label="仓库描述">
+              <el-input type="textarea" v-model="warehouseInfo.warehouseText"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -113,60 +107,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- <div style="margin:30px;" class="cpmoany-friends">
-      <el-row>
-        <el-col :span="24" class="col-title">所属上级公司</el-col>
-        <el-form :model="parentCompany" label-width="80px">
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyName}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司代码">
-              <span>{{parentCompany.companyCode}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyUser}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司名称">
-              <span>{{parentCompany.companyTel}}</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" class="col-text">
-            <el-form-item label="公司地址">
-              <span>{{parentCompany.companyAddr}}</span>
-            </el-form-item>
-          </el-col>
-        </el-form>
-      </el-row>
-    </div>
-
-    <div style="margin:30px;" class="cpmoany-friends">
-      <el-row>
-        <el-col :span="24" class="col-title">所辖子公司</el-col>
-        <el-col :span="24" class="col-title">
-           <vxe-table
-          border="inner"
-          :align="allAlign"
-          :data="chilidcompanylist"
-        >
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="companyName" title="公司名称"></vxe-table-column>
-          <vxe-table-column field="companyCode" title="公司编码"></vxe-table-column>
-          <vxe-table-column field="companyClassify" title="公司级别" :formatter="fmtcompanylevel"></vxe-table-column>
-          <vxe-table-column field="companyUser" title="公司联系人"></vxe-table-column>
-          <vxe-table-column field="companyTel" title="公司联系电话"></vxe-table-column>
-          <vxe-table-column field="useFlg" title="是否使用" :formatter="fmtuseflg"></vxe-table-column>
-        </vxe-table>
-        </el-col>
-        
-      </el-row>
-    </div>-->
   </div>
 </template>
 
@@ -176,79 +116,55 @@ import {
   getWarehouseById,
   saveOrModifyWarehouse
 } from "@/api/wms/warehouse/warehouse";
-import { getCompanyPageByAttributes } from "@/api/wms/company/company";
+import { getDictPageByAttributes } from "@/api/dict";
+
+// import { getCompanyPageByAttributes } from "@/api/wms/company/company";
 import moment from "moment";
 
 export default {
-  name: "companyInfo",
+  name: "HouseInfo",
   computed: {
     ...mapGetters(["name"])
   },
   data() {
     return {
+      useFlg: [],
       warehouseid: "",
       type: "",
       warehouseInfo: {},
-      companyList: [],
+      // companyList: [],
       tablePage: {
         current: 1,
         size: 100,
         total: 0
       },
-      warehouseClassify: [
-        {
-          value: "ZCQ",
-          label: "总公司仓库"
-        },
-        {
-          value: "SCQ",
-          label: "省级分公司仓库"
-        },
-        {
-          value: "CCQ",
-          label: "市级分公司仓库"
-        },
-        {
-          value: "QXCQ",
-          label: "区县级分公司仓库"
-        },
-        {
-          value: "XSDCQ",
-          label: "乡镇、社区销售点仓库"
-        }
-      ],
-      useFlg: [
-        {
-          value: "use",
-          label: "启用"
-        },
-        {
-          value: "pause",
-          label: "暂停使用"
-        },
-        {
-          value: "abandon",
-          label: "弃用"
-        }
-      ],
+      Classify: [],
       disable: false,
       allAlign: null
     };
   },
   created() {
+    let params1 = {
+      dictType: "wms_useflg"
+    };
+    let params2 = {
+      dictType: "org_classify"
+    };
+    this._getDictPageByAttributes_useflg(params1);
+    this._getDictPageByAttributes_classify(params2)
     this.warehouseInfo = {};
-    
+
     this.warehouseid = this.$route.params.id;
     if (this.warehouseid === "add") {
       this.type = "保存";
-      this.warehouseInfo.useFlg = 'use'
+      this.warehouseInfo.useFlg = "WMS_USEFLG_USE";
     } else {
-        this._getWarehouseById(this.warehouseid);
+      this._getWarehouseById(this.warehouseid);
       this.type = "修改";
       this.disable = true;
-      setTimeout(() => {
-        this.getcompanylist();
-      }, 500);
+      // setTimeout(() => {
+      //   this.getcompanylist();
+      // }, 500);
     }
   },
   methods: {
@@ -274,45 +190,59 @@ export default {
         }
       });
     },
-    _getCompanyPageByAttributes(data) {
-      getCompanyPageByAttributes(data).then(res => {
+    _getDictPageByAttributes_useflg(params) {
+      getDictPageByAttributes(params).then(res => {
         if (res.status === 200) {
-          this.companyList = res.data.records;
+          this.useFlg = res.data.records;
         }
       });
     },
-    getcompanylist() {
-      let warehouseClassify = "";
-      if (this.warehouseInfo.warehouseClassify == "SCQ") {
-        warehouseClassify = "SGS";
-      } else if (this.warehouseInfo.warehouseClassify == "CCQ") {
-        warehouseClassify = "CGS";
-      } else if (this.warehouseInfo.warehouseClassify == "QXCQ") {
-        warehouseClassify = "QXGS";
-      } else if (this.warehouseInfo.warehouseClassify == "XSDCQ") {
-        warehouseClassify = "XSD";
-      } else if (this.warehouseInfo.warehouseClassify == "ZCQ") {
-        warehouseClassify = "ZGS";
-      }
-      const data = {
-        companyClassify: warehouseClassify
-      };
-      this._getCompanyPageByAttributes(data);
+     _getDictPageByAttributes_classify(params) {
+      getDictPageByAttributes(params).then(res => {
+        if (res.status === 200) {
+          this.Classify = res.data.records;
+        }
+      });
     },
-    changelevel() {
-      this.warehouseInfo.companyId = '';
-      this.getcompanylist();
-      
-    },
+    // _getCompanyPageByAttributes(data) {
+    //   getCompanyPageByAttributes(data).then(res => {
+    //     if (res.status === 200) {
+    //       this.companyList = res.data.records;
+    //     }
+    //   });
+    // },
+    // getcompanylist() {
+    //   let warehouseClassify = "";
+    //   if (this.warehouseInfo.warehouseClassify == "SCQ") {
+    //     warehouseClassify = "SGS";
+    //   } else if (this.warehouseInfo.warehouseClassify == "CCQ") {
+    //     warehouseClassify = "CGS";
+    //   } else if (this.warehouseInfo.warehouseClassify == "QXCQ") {
+    //     warehouseClassify = "QXGS";
+    //   } else if (this.warehouseInfo.warehouseClassify == "XSDCQ") {
+    //     warehouseClassify = "XSD";
+    //   } else if (this.warehouseInfo.warehouseClassify == "ZCQ") {
+    //     warehouseClassify = "ZGS";
+    //   }
+    //   const data = {
+    //     companyClassify: warehouseClassify
+    //   };
+    //   this._getCompanyPageByAttributes(data);
+    // },
+    // changelevel() {
+    //   this.warehouseInfo.companyId = '';
+    //   this.getcompanylist();
+
+    // },
     // 两个select进行级联操作的时候需要进行特殊处理
-    getvalue(val){
+    getvalue(val) {
       if (val) {
-        let obj = {}
+        let obj = {};
         obj = this.companyList.find(item => {
-          return item.value === val 
-        })
-        this.$set(this.warehouseInfo, this.warehouseInfo.companyId, val.value)
-      } 
+          return item.value === val;
+        });
+        this.$set(this.warehouseInfo, this.warehouseInfo.companyId, val.value);
+      }
     },
     backtoindex() {
       const router = {
@@ -321,15 +251,15 @@ export default {
         meat: {}
       };
       this.$router.push(router);
-    },
-    fmtcompanylevel({ cellValue }) {
-      let item = this.warehouseClassify.find(item => item.value === cellValue);
-      return item ? item.label : "";
-    },
-    fmtuseflg({ cellValue }) {
-      let item = this.useFlg.find(item => item.value === cellValue);
-      return item ? item.label : "";
     }
+    // fmtcompanylevel({ cellValue }) {
+    //   let item = this.warehouseClassify.find(item => item.value === cellValue);
+    //   return item ? item.label : "";
+    // },
+    // fmtuseflg({ cellValue }) {
+    //   let item = this.useFlg.find(item => item.value === cellValue);
+    //   return item ? item.label : "";
+    // }
     // formatdate(data) {
     //   if (this.companyid === "add") {
     //     return;
