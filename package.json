@@ -18,7 +18,7 @@
     "@tinymce/tinymce-vue": "3.0.1",
     "axios": "0.18.0",
     "bpmn-js": "^3.4.1",
-    "bpmn-js-properties-panel": "^0.30.0",
+    "bpmn-js-properties-panel": "^0.35.0",
     "camunda-bpmn-moddle": "^3.2.0",
     "echarts": "^4.4.0",
     "element-ui": "^2.10.0",
